@@ -20,7 +20,6 @@ func GetAllTasks() []models.Task {
 	mu.RLock() // RLock = Kunci hanya-baca (bisa dibaca berbarengan)
 	defer mu.RUnlock()
 
-	// MENGHINDARI BUG REFERENSI MUTASI: 
 	// Kita tidak mereturn variabel Tasks asli agar tidak diotak-atik caller, 
 	// Melainkan mereturn kopian isi arraynya.
 	tasksCopy := make([]models.Task, len(Tasks))
@@ -46,7 +45,7 @@ func GetTaskByID(id int) *models.Task {
 // AddTask menangani generate ID otomatis & Mutex penulisan data
 // Membalikkan (return) pointer hasil task yang sudah terbuat ID-nya
 func AddTask(task models.Task) models.Task {
-	mu.Lock() // Lock = Kunci eksklusif penulisan
+	mu.Lock() 
 	defer mu.Unlock()
 
 	task.ID = nextID
@@ -82,7 +81,7 @@ func DeleteTask(id int) bool {
 	for i, t := range Tasks {
 		if t.ID == id {
 			Tasks = append(Tasks[:i], Tasks[i+1:]...)
-			return true // BUG FIXED: Menghentikan iterasi setelah dihapus
+			return true // Menghentikan iterasi setelah dihapus
 		}
 	}
 	
