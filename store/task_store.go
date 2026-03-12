@@ -20,8 +20,7 @@ func GetAllTasks() []models.Task {
 	mu.RLock() // RLock = Kunci hanya-baca (bisa dibaca berbarengan)
 	defer mu.RUnlock()
 
-	// Kita tidak mereturn variabel Tasks asli agar tidak diotak-atik caller, 
-	// Melainkan mereturn kopian isi arraynya.
+	// mereturn kopian isi arraynya.
 	tasksCopy := make([]models.Task, len(Tasks))
 	copy(tasksCopy, Tasks)
 	
@@ -34,7 +33,7 @@ func GetTaskByID(id int) *models.Task {
 
 	for _, t := range Tasks {
 		if t.ID == id {
-			// Kita return nilai fix salinannya, bukan pointer langsung ke array memori utama
+			// Kita return nilai fix salinannya
 			taskCopy := t
 			return &taskCopy
 		}
